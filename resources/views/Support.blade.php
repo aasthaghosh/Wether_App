@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Contact Us | FarmForecast</title>
   <link rel="stylesheet" href="S_style.css" />
 </head>
+
 <body>
 
   <!-- Background Video -->
@@ -13,7 +15,8 @@
   </video>
 
   <!-- Contact Form -->
-  <form class="container" id="contactForm" action="contact.php" method="POST" onsubmit="return submitForm(event);">
+  <form class="container" id="contactForm" action="{{ route('contact') }}" method="POST" onsubmit="return submitForm(event);">
+    @csrf
     <h2>Contact Us</h2>
     <p class="subtext">Have questions about our<br>Automated Climate Monitoring System?</p>
 
@@ -32,7 +35,7 @@
     <button type="submit">Send Message</button>
 
     <!-- Office Details Button -->
-      <a href="office.php" class="back-btn">Office Details →</a>
+    <a href="{{ route('office') }}" class="back-btn">Office Details →</a>
   </form>
 
   <!-- Pop-up -->
@@ -52,33 +55,34 @@
       const formData = new FormData(form);
 
       fetch("contact.php", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.text())
-      .then(data => {
-        if (data.includes("success")) {
-          document.getElementById("popup").style.display = "flex";
-          setTimeout(() => {
-            window.location.href = "office.php";
-          }, 3000);
-        } else {
-          alert("Failed to send message. Please try again.");
-        }
-      })
-      .catch(error => {
-        alert("Error submitting form.");
-        console.error("Error:", error);
-      });
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+          if (data.includes("success")) {
+            document.getElementById("popup").style.display = "flex";
+            setTimeout(() => {
+              window.location.href = "{{ route('office') }}";
+            }, 3000);
+          } else {
+            alert("Failed to send message. Please try again.");
+          }
+        })
+        .catch(error => {
+          alert("Error submitting form.");
+          console.error("Error:", error);
+        });
 
       return false;
     }
 
     function closePopup() {
       document.getElementById("popup").style.display = "none";
-      window.location.href = "homepage.php";
+      window.location.href = "{{ route('home') }}";
     }
   </script>
 
 </body>
+
 </html>

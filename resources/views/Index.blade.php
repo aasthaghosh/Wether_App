@@ -48,7 +48,7 @@
                     </div>
                     <div class="options">
                         <label class="label-style"><input type="checkbox"> Remember me</label>
-                        <a href="forgot.php">Forgot password?</a>
+                        <a href="{{ route('forgot') }}">Forgot password?</a>
                     </div>
                     <input type="submit" class="btn" value="Sign In" name="signIn">
                     <div class="links">

@@ -19,7 +19,7 @@
 
             <div class="toggle-btns">
                 <button onclick="toggleTheme()">Dark-mode</button>
-                <button onclick="location.href='Support.php'">Support Us</button>
+                <button onclick="location.href='{{ route('support') }}'">Support Us</button>
             </div>
 
             <div class="office-info">

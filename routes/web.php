@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SoilSampleController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', function () {
@@ -24,7 +25,7 @@ Route::middleware('auth')->group(function () {
         return view('AboutUs');
     })->name('about');
 
-    Route::get('/contact', function () {
+    Route::match(['get', 'post'], '/contact', function () {
         return view('contact');
     })->name('contact');
 
@@ -44,9 +45,9 @@ Route::middleware('auth')->group(function () {
         return view('Monitor');
     })->name('monitor');
 
-    Route::get('/soil-analysis', function () {
-        return view('SoilAna');
-    })->name('soil');
+    Route::get('/soil-analysis', [SoilSampleController::class, 'index'])->name('soil');
+    Route::post('/soil-analysis', [SoilSampleController::class, 'store'])->name('soil.store');
+    Route::get('/api/soil-samples/{sample_id}', [SoilSampleController::class, 'show'])->name('soil.show');
 
     Route::get('/history-trend', function () {
         return view('HisTrend');

@@ -314,8 +314,8 @@ if ($showAlert) {
             <img class="logo" src="Images\Logo.png" alt="logo">
             <ul class="navbar">
                 <li><a href="#" id="home" class="active">HOME</a></li>
-                <li><a href="Weather\weather frontend\ref.php" id="climate-data">CLIMATE DATA</a></li>
-                <li><a href="Chatbot\index.php" id="chat-bot">CHATBOT</a></li>
+                <li><a href="{{ route('weather') }}" id="climate-data">CLIMATE DATA</a></li>
+                <li><a href="{{ route('chatbot') }}" id="chat-bot">CHATBOT</a></li>
                 <div class="burger-menu">
                     <label class="burger" for="burger">
                         <input class="line" type="checkbox" id="burger" />
@@ -323,9 +323,9 @@ if ($showAlert) {
                     <div id="slide-page" class="slide-page">
                         <div class="Section_Nav">
                             <h2>More</h2>
-                            <a href="AboutUs.php"><i class="fas fa-info-circle"></i> About Us</a>
-                            <a href="Support.php"><i class="fas fa-hands-helping"></i> Support</a>
-                            <a href="index.php" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            <a href="{{ route('about') }}"><i class="fas fa-info-circle"></i> About Us</a>
+                            <a href="{{ route('support') }}"><i class="fas fa-hands-helping"></i> Support</a>
+                            <a href="{{ route('index') }}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             <button id="close-btn" class="close-btn">Back<i class="fas fa-arrow-right"></i></button>
                         </div>
                     </div>
@@ -345,7 +345,7 @@ if ($showAlert) {
             <p>Our advanced agricultural solution combines IoT sensors, AI analytics, and weather forecasting to help farmers optimize crop yields through precise climate monitoring and actionable insights.</p>
 
             <div class="features-grid">
-                <a href="Monitor.php" class="feature-card-link">
+                <a href="{{ route('monitor') }}" class="feature-card-link">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-temperature-low"></i>
@@ -360,7 +360,7 @@ if ($showAlert) {
                     </div>
                 </a>
 
-                <a href="SoilAna.php" class="feature-card-link">
+                <a href="{{ route('soil') }}" class="feature-card-link">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-seedling"></i>
@@ -375,7 +375,7 @@ if ($showAlert) {
                     </div>
                 </a>
 
-                <a href="Chatbot\index.php" class="feature-card-link">
+                <a href="{{ route('chatbot') }}" class="feature-card-link">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-robot"></i>
@@ -390,7 +390,7 @@ if ($showAlert) {
                     </div>
                 </a>
 
-                <a href="Weather\weather frontend\ref.php" class="feature-card-link">
+                <a href="{{ route('weather') }}" class="feature-card-link">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-cloud-sun-rain"></i>
@@ -405,7 +405,7 @@ if ($showAlert) {
                     </div>
                 </a>
 
-                <a href="Alert.php" class="feature-card-link">
+                <a href="{{ route('alert') }}" class="feature-card-link">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-bell"></i>
@@ -419,7 +419,7 @@ if ($showAlert) {
                         </div>
                     </div>
                 </a>
-                <a href="HisTrend.php" class="feature-card-link">
+                <a href="{{ route('history') }}" class="feature-card-link">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-chart-line"></i>
