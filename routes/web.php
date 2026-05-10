@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClimateDataController;
 use App\Http\Controllers\SoilSampleController;
 use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\MailController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', function () {
@@ -28,9 +29,12 @@ Route::middleware('auth')->group(function () {
         return view('AboutUs');
     })->name('about');
 
-    Route::match(['get', 'post'], '/contact', function () {
+    // Contact Routes
+    Route::get('/contact', function () {
         return view('contact');
     })->name('contact');
+
+    Route::post('/contact', [MailController::class, 'send'])->name('contact.send');
 
     Route::get('/register', function () {
         return view('register');
@@ -75,6 +79,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/weather/data', [WeatherController::class, 'fetch'])->name('weather.data');
     Route::get('/weather', [WeatherController::class, 'index'])->name('weather');
 
+    // Climate Data Routes
     Route::get('/climate-data', [ClimateDataController::class, 'index'])->name('climate');
     Route::get('/climate-data/fetch', [ClimateDataController::class, 'fetch'])->name('climate.fetch');
 });
+
