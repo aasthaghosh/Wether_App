@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClimateDataController;
 use App\Http\Controllers\SoilSampleController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\MailController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\MailController;
 Route::middleware('guest')->group(function () {
     Route::get('/', function () {
         return view('Index');
-    })->name('index');
+    })->name('login');
 
     // Authentication Routes
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
@@ -28,9 +29,10 @@ Route::middleware('auth')->group(function () {
         return view('AboutUs');
     })->name('about');
 
+    // Contact Routes
     Route::get('/contact', function () {
         return view('contact');
-    })->name('contact.view');
+    })->name('contact');
 
     Route::post('/contact', [MailController::class, 'send'])->name('contact.send');
 
@@ -70,10 +72,18 @@ Route::middleware('auth')->group(function () {
         return view('Alert');
     })->name('alert');
 
+
     Route::get('/chatbot', function () {
         return view('chatbot');
     })->name('chatbot');
 
+    Route::post('/chatbot/message', [App\Http\Controllers\ChatbotController::class, 'sendMessage'])->name('chatbot.message');
+
     Route::get('/weather/data', [WeatherController::class, 'fetch'])->name('weather.data');
     Route::get('/weather', [WeatherController::class, 'index'])->name('weather');
+
+    // Climate Data Routes
+    Route::get('/climate-data', [ClimateDataController::class, 'index'])->name('climate');
+    Route::get('/climate-data/fetch', [ClimateDataController::class, 'fetch'])->name('climate.fetch');
 });
+

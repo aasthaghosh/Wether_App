@@ -314,7 +314,7 @@ if ($showAlert) {
             <img class="logo" src="Images\Logo.png" alt="logo">
             <ul class="navbar">
                 <li><a href="#" id="home" class="active">HOME</a></li>
-                <li><a href="{{ route('weather') }}" id="climate-data">CLIMATE DATA</a></li>
+                <li><a href="{{ route('climate') }}" id="climate-data">CLIMATE DATA</a></li>
                 <li><a href="{{ route('chatbot') }}" id="chat-bot">CHATBOT</a></li>
                 <div class="burger-menu">
                     <label class="burger" for="burger">
@@ -325,7 +325,7 @@ if ($showAlert) {
                             <h2>More</h2>
                             <a href="{{ route('about') }}"><i class="fas fa-info-circle"></i> About Us</a>
                             <a href="{{ route('support') }}"><i class="fas fa-hands-helping"></i> Support</a>
-                            <a href="{{ route('index') }}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            <a href="{{ route('login') }}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             <button id="close-btn" class="close-btn">Back<i class="fas fa-arrow-right"></i></button>
                         </div>
                     </div>
