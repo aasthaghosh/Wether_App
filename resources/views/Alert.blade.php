@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔔Alerts | FarmForecast</title>
     <link rel="stylesheet" href="alert.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-
 <body>
     <header>
         <h1>Smart Agricultural Alerts</h1>
@@ -32,7 +31,7 @@
                     </h2>
 
                     <div class="weather-card">
-                        <div style="font-size: 24px;">Punjab, Phagwara</div>
+                        <div style="font-size: 24px;" id="display-location">{{ $farmProfile->location ?? 'Punjab, Phagwara' }}</div>
                         <div style="font-size: 16px;" id="current-date">Wednesday, April 16, 2025</div>
                         <div class="temperature" id="current-temp">72°F</div>
                         <div style="font-size: 18px;">Partly Cloudy</div>
@@ -63,31 +62,31 @@
                     <h2 class="panel-title">Farm Profile</h2>
                     <div class="form-group">
                         <label for="location">Location</label>
-                        <input type="text" id="location" value="Sacramento Valley, CA">
+                        <input type="text" id="location" value="{{ $farmProfile->location ?? 'Sacramento Valley, CA' }}">
                     </div>
                     <div class="form-group">
                         <label for="field-size">Field Size</label>
-                        <input type="text" id="field-size" value="120 acres">
+                        <input type="text" id="field-size" value="{{ $farmProfile->field_size ?? '120 acres' }}">
                     </div>
                     <div class="form-group">
                         <label for="crop-type">Primary Crop</label>
                         <select id="crop-type">
-                            <option value="corn" selected>Corn</option>
-                            <option value="wheat">Wheat</option>
-                            <option value="soybean">Soybean</option>
-                            <option value="rice">Rice</option>
-                            <option value="alfalfa">Alfalfa</option>
-                            <option value="tomatoes">Tomatoes</option>
+                            <option value="corn" {{ strtolower($farmProfile->primary_crop ?? '') == 'corn' ? 'selected' : '' }}>Corn</option>
+                            <option value="wheat" {{ strtolower($farmProfile->primary_crop ?? '') == 'wheat' ? 'selected' : '' }}>Wheat</option>
+                            <option value="soybean" {{ strtolower($farmProfile->primary_crop ?? '') == 'soybean' ? 'selected' : '' }}>Soybean</option>
+                            <option value="rice" {{ strtolower($farmProfile->primary_crop ?? '') == 'rice' ? 'selected' : '' }}>Rice</option>
+                            <option value="alfalfa" {{ strtolower($farmProfile->primary_crop ?? '') == 'alfalfa' ? 'selected' : '' }}>Alfalfa</option>
+                            <option value="tomatoes" {{ strtolower($farmProfile->primary_crop ?? '') == 'tomatoes' ? 'selected' : '' }}>Tomatoes</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="soil-type">Soil Type</label>
                         <select id="soil-type">
-                            <option value="loam" selected>Loam</option>
-                            <option value="clay">Clay</option>
-                            <option value="sandy">Sandy</option>
-                            <option value="silt">Silt</option>
-                            <option value="clay-loam">Clay Loam</option>
+                            <option value="loam" {{ strtolower($farmProfile->soil_type ?? '') == 'loam' ? 'selected' : '' }}>Loam</option>
+                            <option value="clay" {{ strtolower($farmProfile->soil_type ?? '') == 'clay' ? 'selected' : '' }}>Clay</option>
+                            <option value="sandy" {{ strtolower($farmProfile->soil_type ?? '') == 'sandy' ? 'selected' : '' }}>Sandy</option>
+                            <option value="silt" {{ strtolower($farmProfile->soil_type ?? '') == 'silt' ? 'selected' : '' }}>Silt</option>
+                            <option value="clay-loam" {{ strtolower($farmProfile->soil_type ?? '') == 'clay-loam' ? 'selected' : '' }}>Clay Loam</option>
                         </select>
                     </div>
 
@@ -160,21 +159,21 @@
                     <h2 class="panel-title">Crop Status</h2>
                     <div style="display: flex; margin-bottom: 20px;">
                         <div style="flex: 1;">
-                            <img src="Corn image.jpg" alt="Corn field" class="crop-image">
+                            <img src="Corn image.jpg" alt="Corn field" class="crop-image" id="crop-status-img">
                         </div>
                         <div style="flex: 1; padding-left: 20px;">
-                            <h3>Corn - V6 Growth Stage</h3>
-                            <p class="crop-info">Planted: March 25, 2025</p>
-                            <p class="crop-info">Estimated Harvest: September 10, 2025</p>
-                            <p class="crop-info">Growing Degree Days: 512 GDD</p>
+                            <h3 id="crop-status-title">Corn - V6 Growth Stage</h3>
+                            <p class="crop-info" id="crop-status-planted">Planted: March 25, 2025</p>
+                            <p class="crop-info" id="crop-status-harvest">Estimated Harvest: September 10, 2025</p>
+                            <p class="crop-info" id="crop-status-gdd">Growing Degree Days: 512 GDD</p>
 
                             <div style="margin-top: 15px;">
                                 <div style="display: flex; justify-content: space-between;">
                                     <span>Growth Progress</span>
-                                    <span>30%</span>
+                                    <span id="crop-status-progress-text">30%</span>
                                 </div>
                                 <div class="progress-container">
-                                    <div class="progress-bar" style="width: 30%"></div>
+                                    <div class="progress-bar" id="crop-status-progress-bar" style="width: 30%"></div>
                                 </div>
                             </div>
                         </div>
@@ -184,18 +183,18 @@
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px;">
                         <div style="text-align: center;">
                             <div>Soil Temperature</div>
-                            <div style="font-size: 24px; font-weight: 500;">62°F</div>
-                            <span class="badge badge-optimal">Optimal</span>
+                            <div style="font-size: 24px; font-weight: 500;" id="crop-soil-temp">62°F</div>
+                            <span class="badge badge-optimal" id="crop-soil-temp-badge">Optimal</span>
                         </div>
                         <div style="text-align: center;">
                             <div>Soil Moisture</div>
-                            <div style="font-size: 24px; font-weight: 500;">28%</div>
-                            <span class="badge badge-caution">Moderate</span>
+                            <div style="font-size: 24px; font-weight: 500;" id="crop-soil-moisture">28%</div>
+                            <span class="badge badge-caution" id="crop-soil-moisture-badge">Moderate</span>
                         </div>
                         <div style="text-align: center;">
                             <div>Growth Rate</div>
-                            <div style="font-size: 24px; font-weight: 500;">+2.1"/wk</div>
-                            <span class="badge badge-optimal">Normal</span>
+                            <div style="font-size: 24px; font-weight: 500;" id="crop-growth-rate">+2.1"/wk</div>
+                            <span class="badge badge-optimal" id="crop-growth-rate-badge">Normal</span>
                         </div>
                     </div>
                 </div>
@@ -203,35 +202,31 @@
                 <div class="panel">
                     <h2 class="panel-title">Planting Windows</h2>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 15px;">
-                        <div
-                            style="padding: 15px; border-radius: 8px; background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+                        <div style="padding: 15px; border-radius: 8px; background-color: #e8f5e9; border-left: 4px solid #4caf50;">
                             <h3>Corn</h3>
                             <p><strong>Optimal Window:</strong> Mar 15 - Apr 30</p>
                             <p><strong>Status:</strong> <span class="badge badge-optimal">In Progress</span></p>
                             <p><strong>Soil Temperature:</strong> 62°F (Target: >55°F)</p>
                             <p><strong>Days Remaining:</strong> 14</p>
                         </div>
-
-                        <div
-                            style="padding: 15px; border-radius: 8px; background-color: #e0f7fa; border-left: 4px solid #00acc1;">
+                        
+                        <div style="padding: 15px; border-radius: 8px; background-color: #e0f7fa; border-left: 4px solid #00acc1;">
                             <h3>Soybeans</h3>
                             <p><strong>Optimal Window:</strong> May 1 - Jun 15</p>
                             <p><strong>Status:</strong> <span class="badge badge-caution">Coming Soon</span></p>
                             <p><strong>Soil Temperature:</strong> 62°F (Target: >60°F)</p>
                             <p><strong>Days Until Start:</strong> 16</p>
                         </div>
-
-                        <div
-                            style="padding: 15px; border-radius: 8px; background-color: #fff8e1; border-left: 4px solid #ffb300;">
+                        
+                        <div style="padding: 15px; border-radius: 8px; background-color: #fff8e1; border-left: 4px solid #ffb300;">
                             <h3>Winter Wheat</h3>
                             <p><strong>Optimal Window:</strong> Oct 1 - Nov 15</p>
                             <p><strong>Status:</strong> <span class="badge badge-warning">Months Away</span></p>
                             <p><strong>Current Phase:</strong> Off-season</p>
                             <p><strong>Days Until Start:</strong> 168</p>
                         </div>
-
-                        <div
-                            style="padding: 15px; border-radius: 8px; background-color: #f3e5f5; border-left: 4px solid #9c27b0;">
+                        
+                        <div style="padding: 15px; border-radius: 8px; background-color: #f3e5f5; border-left: 4px solid #9c27b0;">
                             <h3>Cover Crops</h3>
                             <p><strong>Optimal Window:</strong> Sep 1 - Oct 15</p>
                             <p><strong>Status:</strong> <span class="badge badge-warning">Months Away</span></p>
@@ -273,8 +268,7 @@
             });
 
             // Generate alerts
-            const alerts = [
-                {
+            const alerts = [{
                     type: 'frost',
                     title: 'Overnight Frost Risk',
                     message: 'Temperatures expected to drop to 32°F overnight. Consider protecting sensitive crops.',
@@ -325,7 +319,6 @@
                         <div class="alert-time">${alert.time}</div>
                         <div class="alert-actions">
                             <button class="alert-button">Mark as Read</button>
-                            <button class="alert-button">More Details</button>
                         </div>
                     </div>
                 `;
@@ -361,8 +354,7 @@
 
             // Add new alert randomly
             setTimeout(() => {
-                const newAlerts = [
-                    {
+                const newAlerts = [{
                         type: 'planting',
                         title: 'Soil Moisture Optimal',
                         message: 'Current soil moisture levels ideal for seed germination. Consider accelerating planting schedule.',
@@ -390,7 +382,6 @@
                         <div class="alert-time">${randomAlert.time}</div>
                         <div class="alert-actions">
                             <button class="alert-button">Mark as Read</button>
-                            <button class="alert-button">More Details</button>
                         </div>
                     </div>
                 `;
@@ -413,29 +404,200 @@
                     notificationBadge.textContent = parseInt(notificationBadge.textContent) - 1;
                 }
             });
+
+            // Function to update Crop Status dynamically
+            const updateDashboard = function() {
+                const locationInput = document.getElementById('location').value;
+                const fieldSizeInput = document.getElementById('field-size').value;
+                const selectedCrop = document.getElementById('crop-type').value;
+                const selectedSoil = document.getElementById('soil-type').value;
+
+                // Update weather location display dynamically
+                if (document.getElementById('display-location')) {
+                    document.getElementById('display-location').textContent = locationInput;
+                }
+
+                const cropData = {
+                    corn: {
+                        name: 'Corn',
+                        stage: 'V6 Growth Stage',
+                        planted: 'March 25, 2025',
+                        harvest: 'September 10, 2025',
+                        gdd: '512 GDD',
+                        progress: '30%',
+                        image: 'Corn image.jpg',
+                        temp: '68°F',
+                        tempStatus: 'Optimal',
+                        moist: '28%',
+                        moistStatus: 'Moderate',
+                        rate: '+2.1"/wk',
+                        rateStatus: 'Normal'
+                    },
+                    wheat: {
+                        name: 'Wheat',
+                        stage: 'Tillering Stage',
+                        planted: 'November 10, 2024',
+                        harvest: 'June 25, 2025',
+                        gdd: '850 GDD',
+                        progress: '45%',
+                        image: 'Corn image.jpg',
+                        temp: '55°F',
+                        tempStatus: 'Cool',
+                        moist: '22%',
+                        moistStatus: 'Low',
+                        rate: '+1.5"/wk',
+                        rateStatus: 'Slow'
+                    },
+                    soybean: {
+                        name: 'Soybean',
+                        stage: 'Vegetative Emergence',
+                        planted: 'May 5, 2025',
+                        harvest: 'October 15, 2025',
+                        gdd: '120 GDD',
+                        progress: '15%',
+                        image: 'Corn image.jpg',
+                        temp: '70°F',
+                        tempStatus: 'Optimal',
+                        moist: '45%',
+                        moistStatus: 'Good',
+                        rate: '+2.5"/wk',
+                        rateStatus: 'Fast'
+                    },
+                    rice: {
+                        name: 'Rice',
+                        stage: 'Seedling Stage',
+                        planted: 'April 20, 2025',
+                        harvest: 'September 30, 2025',
+                        gdd: '300 GDD',
+                        progress: '20%',
+                        image: 'Corn image.jpg',
+                        temp: '75°F',
+                        tempStatus: 'Warm',
+                        moist: '85%',
+                        moistStatus: 'Optimal',
+                        rate: '+3.0"/wk',
+                        rateStatus: 'Fast'
+                    },
+                    alfalfa: {
+                        name: 'Alfalfa',
+                        stage: 'Early Bud',
+                        planted: 'March 1, 2025',
+                        harvest: 'June 10, 2025',
+                        gdd: '600 GDD',
+                        progress: '60%',
+                        image: 'Corn image.jpg',
+                        temp: '60°F',
+                        tempStatus: 'Optimal',
+                        moist: '30%',
+                        moistStatus: 'Moderate',
+                        rate: '+1.8"/wk',
+                        rateStatus: 'Normal'
+                    },
+                    tomatoes: {
+                        name: 'Tomatoes',
+                        stage: 'Flowering',
+                        planted: 'April 10, 2025',
+                        harvest: 'August 15, 2025',
+                        gdd: '450 GDD',
+                        progress: '40%',
+                        image: 'Corn image.jpg',
+                        temp: '72°F',
+                        tempStatus: 'Optimal',
+                        moist: '50%',
+                        moistStatus: 'Good',
+                        rate: '+2.2"/wk',
+                        rateStatus: 'Normal'
+                    }
+                };
+
+                const data = cropData[selectedCrop] || cropData['corn'];
+
+                document.getElementById('crop-status-title').textContent = data.name + ' - ' + data.stage;
+                document.getElementById('crop-status-planted').textContent = 'Planted: ' + data.planted;
+                document.getElementById('crop-status-harvest').textContent = 'Estimated Harvest: ' + data.harvest;
+                document.getElementById('crop-status-gdd').textContent = 'Growing Degree Days: ' + data.gdd;
+
+                document.getElementById('crop-status-progress-text').textContent = data.progress;
+                document.getElementById('crop-status-progress-bar').style.width = data.progress;
+                document.getElementById('crop-status-img').alt = data.name + ' field';
+
+                // Update Current Conditions below Crop Status
+                document.getElementById('crop-soil-temp').textContent = data.temp;
+                document.getElementById('crop-soil-temp-badge').textContent = data.tempStatus;
+                document.getElementById('crop-soil-temp-badge').className = data.tempStatus === 'Optimal' ? 'badge badge-optimal' : 'badge badge-caution';
+
+                document.getElementById('crop-soil-moisture').textContent = data.moist;
+                document.getElementById('crop-soil-moisture-badge').textContent = data.moistStatus;
+                document.getElementById('crop-soil-moisture-badge').className = data.moistStatus === 'Good' || data.moistStatus === 'Optimal' ? 'badge badge-optimal' : (data.moistStatus === 'Low' ? 'badge badge-warning' : 'badge badge-caution');
+
+                document.getElementById('crop-growth-rate').textContent = data.rate;
+                document.getElementById('crop-growth-rate-badge').textContent = data.rateStatus;
+                document.getElementById('crop-growth-rate-badge').className = data.rateStatus === 'Fast' || data.rateStatus === 'Normal' ? 'badge badge-optimal' : 'badge badge-warning';
+            };
+
+            // Trigger updates dynamically when any field is changed (without needing button click)
+            document.getElementById('crop-type').addEventListener('change', updateDashboard);
+            document.getElementById('soil-type').addEventListener('change', updateDashboard);
+            document.getElementById('location').addEventListener('input', updateDashboard);
+
+            // Handle Profile Update Button click (for explicitly showing alert)
+            const profileBtn = document.getElementById('update-profile-btn');
+            profileBtn.addEventListener('click', async function() {
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = 'Updating...';
+                btn.disabled = true;
+
+                updateDashboard();
+
+                const locationInput = document.getElementById('location').value;
+                const fieldSizeInput = document.getElementById('field-size').value;
+                const cropName = document.getElementById('crop-type').value;
+                const soilName = document.getElementById('soil-type').value;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                try {
+                    const response = await fetch('/alert/profile', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            location: locationInput,
+                            field_size: fieldSizeInput,
+                            primary_crop: cropName,
+                            soil_type: soilName
+                        })
+                    });
+
+                    if (response.ok) {
+                        // Give feedback to user
+                        const oldBg = btn.style.backgroundColor;
+                        btn.style.backgroundColor = '#4CAF50';
+                        btn.textContent = 'Updated!';
+                        setTimeout(() => {
+                            btn.style.backgroundColor = oldBg;
+                            btn.textContent = originalText;
+                            btn.disabled = false;
+                        }, 2000);
+                    } else {
+                        alert('Failed to update profile. Ensure you are logged in.');
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }
+            });
+            
+            // Run once on load to populate correct initial values
+            updateDashboard();
         });
     </script>
 </body>
-
-</html>
-btn.textContent = originalText;
-btn.disabled = false;
-}, 2000);
-
-} else {
-alert('Failed to update profile. Ensure you are logged in.');
-btn.textContent = originalText;
-btn.disabled = false;
-}
-} catch (error) {
-console.error('Error:', error);
-alert('An error occurred.');
-btn.textContent = originalText;
-btn.disabled = false;
-}
-});
-});
-</script>
-</body>
-
 </html>
