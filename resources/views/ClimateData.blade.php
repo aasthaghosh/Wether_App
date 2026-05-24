@@ -58,7 +58,7 @@
     <header class="climate-header">
         <div class="header-inner">
             <div class="header-brand">
-                <div class="brand-icon">🌍</div>
+                <div class="brand-icon"></div>
                 <div>
                     <h1>Climate Data</h1>
                     <p>Agricultural Climate Intelligence Dashboard</p>
