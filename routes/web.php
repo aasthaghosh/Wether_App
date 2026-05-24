@@ -68,10 +68,7 @@ Route::middleware('auth')->group(function () {
         return view('office');
     })->name('office');
 
-    Route::get('/alert', function () {
-        return view('Alert');
-    })->name('alert');
-
+    Route::get('/alert', [App\Http\Controllers\AlertController::class, 'index'])->name('alert');
 
     Route::get('/chatbot', function () {
         return view('chatbot');
@@ -86,4 +83,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/climate-data', [ClimateDataController::class, 'index'])->name('climate');
     Route::get('/climate-data/fetch', [ClimateDataController::class, 'fetch'])->name('climate.fetch');
 });
+
+// Farm Dashboard API routes (Open to avoid session/401 fetch errors)
+Route::post('/alert/profile', [App\Http\Controllers\AlertController::class, 'updateProfile'])->name('alert.profile');
+Route::post('/alert/todo', [App\Http\Controllers\AlertController::class, 'storeTodo'])->name('alert.todo.store');
+Route::post('/alert/todo/{id}/toggle', [App\Http\Controllers\AlertController::class, 'toggleTodo'])->name('alert.todo.toggle');
 
